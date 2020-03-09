@@ -240,6 +240,11 @@ class Graph:
         Returns a Hamiltonian circuit of type Walk for the graph if one exists,
         or None if none exists.
         """
+        Ham = Walk(self.totalVertices)
+        Ham.addVertex(0)#add first vertex
+        hasHam = tryVisiting(0,1,Ham)
+        if(hasHam):
+            return Ham
         return None
     
 
@@ -265,7 +270,7 @@ class Graph:
         
         currentVertexUnexhaustedEdges = getUnvisitedEdgesAt(vertex)
         if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
-            if(vertex == self.visitedV[0]):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
+            if(vertex == Hamiltonian.getVertex(0)):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
                 return False
             else:
                 #backtrack
