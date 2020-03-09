@@ -240,6 +240,13 @@ class Graph:
         Returns a Hamiltonian circuit of type Walk for the graph if one exists,
         or None if none exists.
         """
+        """
+        How the fuck are we going to check if the walk is Hamiltonian graph or not
+
+        """
+        walk = Walk(self.seed)
+        if isHamiltonian: 
+            return walk
         return None
     
 
@@ -258,5 +265,7 @@ class Graph:
 
         Returns True iff a Hamiltonian circuit has been found and False otherwise
         """
+     
+
         return False
     
