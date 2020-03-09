@@ -240,9 +240,9 @@ class Graph:
         Returns a Hamiltonian circuit of type Walk for the graph if one exists,
         or None if none exists.
         """
-        Ham = Walk(self.totalVertices)
+        Ham = Walk(self.totalVertices())
         Ham.addVertex(0)#add first vertex
-        hasHam = tryVisiting(0,1,Ham)
+        hasHam = self.tryVisiting(0,1,Ham)
         if(hasHam):
             return Ham
         return None
@@ -268,21 +268,21 @@ class Graph:
         if( Hamiltonian.totalVertices() == self.totalV):
             return True
         
-        currentVertexUnexhaustedEdges = getUnvisitedEdgesAt(vertex)
+        currentVertexUnexhaustedEdges = self.getUnvisitedEdgesAt(vertex)
         if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
             if(vertex == Hamiltonian.getVertex(0)):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
                 return False
             else:
                 #backtrack
                 Hamiltonian.removeLastVertex()#remove last vertex on Hamiltonian Walk
-                resetUnvisitedEdgesAt(vertex)#remove list of visted list
-                return tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices), totalvisited-1, Hamiltonian) #makefunction call
+                self.resetUnvisitedEdgesAt(vertex)#remove list of visted list
+                return self.tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices()-1), totalvisited-1, Hamiltonian) #makefunction call
         else:#go throught unchecked edges
             # Go to the next node that has NOT been visited
             nextVertex = currentVertexUnexhaustedEdges[0]
             Hamiltonian.addVertex(nextVertex)
             self.unvisitedE[nextVertex][vertex] =0
-            return tryVisiting(nextVertex,totalvisited+1,Hamiltonian)
+            return self.tryVisiting(nextVertex,totalvisited+1,Hamiltonian)
         
 
     def getUnvisitedEdgesAt(self, vertex):
