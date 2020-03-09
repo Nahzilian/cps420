@@ -260,18 +260,18 @@ class Graph:
         """
 
         #if found the circuit
-        if( len(Hamiltonian) + 1 == self.totalV):
+        if( Hamiltonian.totalVertices() == self.totalV):
             return True
         
-        currentVertexUnexhaustedEdges = self.visitedE
+        currentVertexUnexhaustedEdges = getUnvisitedEdgesAt(vertex)
         if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
             if(vertex == self.visitedV[0]):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
                 return False
             else:
                 #backtrack
-                #remove last vertex on Hamiltonian Walk
-                #remove list of visted list
-                return #makefunction call
+                Hamiltonian.removeLastVertex()#remove last vertex on Hamiltonian Walk
+                resetUnvisitedEdgesAt(vertex)#remove list of visted list
+                return tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices), totalvisited-1, Hamiltonian) #makefunction call
         else:#go throught unchecked edges
             # Go to the next node that has NOT been visited
             if (self.unvisited[totalvisited][totalvisited] != 1):
@@ -279,3 +279,14 @@ class Graph:
             else:
                 return tryVisiting(self,self.unvisitedE[totalvisited][totalvisited],totalvisited+1,Hamiltonian)
         return False
+
+    def getUnvisitedEdgesAt(self, vertex):
+        returnList = []
+        for j in range(self.totalV):
+            if( self.unvisitedE[vertex][j] == 1):#1 means there is a connection
+                returnList.append(j)
+        return returnList
+
+    def resetUnvisitedEdgesAt(self, vertex):
+        for j in range(self.totalV):
+            self.unvisitedE[vertex][j] = self.edges[vertex][j]
