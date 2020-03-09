@@ -274,11 +274,11 @@ class Graph:
                 return tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices), totalvisited-1, Hamiltonian) #makefunction call
         else:#go throught unchecked edges
             # Go to the next node that has NOT been visited
-            if (self.unvisited[totalvisited][totalvisited] != 1):
-                return tryVisiting(self,self.unvisitedE[totalvisited][totalvisited],totalvisited,Hamiltonian)
-            else:
-                return tryVisiting(self,self.unvisitedE[totalvisited][totalvisited],totalvisited+1,Hamiltonian)
-        return False
+            nextVertex = currentVertexUnexhaustedEdges[0]
+            Hamiltonian.addVertex(nextVertex)
+            self.unvisitedE[nextVertex][vertex] =0
+            return tryVisiting(nextVertex,totalvisited+1,Hamiltonian)
+        
 
     def getUnvisitedEdgesAt(self, vertex):
         returnList = []
