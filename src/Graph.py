@@ -273,7 +273,9 @@ class Graph:
                 #remove list of visted list
                 return #makefunction call
         else:#go throught unchecked edges
-            
-        
-
+            # Go to the next node that has NOT been visited
+            if (self.unvisited[totalvisited][totalvisited] != 1):
+                return tryVisiting(self,self.unvisitedE[totalvisited][totalvisited],totalvisited,Hamiltonian)
+            else:
+                return tryVisiting(self,self.unvisitedE[totalvisited][totalvisited],totalvisited+1,Hamiltonian)
         return False
