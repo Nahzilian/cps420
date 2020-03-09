@@ -258,5 +258,17 @@ class Graph:
 
         Returns True iff a Hamiltonian circuit has been found and False otherwise
         """
+
+        #if found the circuit
+        if( len(Hamiltonian) + 1 == self.totalV):
+            return True
+        #go throught unchecked edges
+        currentVertexUnexhaustedEdges = self.visitedE
+        if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
+            if(#do a check for startingNode):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
+                return False
+            return #backtrack and makefunction call
+        
+        
+
         return False
-    
