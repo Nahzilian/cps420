@@ -265,7 +265,7 @@ class Graph:
         
         currentVertexUnexhaustedEdges = self.visitedE
         if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
-            if(#do a check for startingNode):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
+            if(vertex == self.visitedV[0]):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
                 return False
             else:
                 #backtrack
