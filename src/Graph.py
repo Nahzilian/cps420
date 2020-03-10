@@ -240,13 +240,12 @@ class Graph:
         Returns a Hamiltonian circuit of type Walk for the graph if one exists,
         or None if none exists.
         """
-        """
-        How the fuck are we going to check if the walk is Hamiltonian graph or not
+        Ham = Walk(self.totalVertices())
+        Ham.addVertex(0)#add first vertex
+        hasHam = self.tryVisiting(0,1,Ham)
+        if(hasHam):
+            return Ham
 
-        """
-        walk = Walk(self.seed)
-        if isHamiltonian: 
-            return walk
         return None
     
 
@@ -265,7 +264,35 @@ class Graph:
 
         Returns True iff a Hamiltonian circuit has been found and False otherwise
         """
-     
 
-        return False
-    
+        #if found the circuit
+        if( Hamiltonian.totalVertices() == self.totalV):
+            return True
+        
+        currentVertexUnexhaustedEdges = self.getUnvisitedEdgesAt(vertex)
+        if( currentVertexUnexhaustedEdges == [] ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
+            if(vertex == Hamiltonian.getVertex(0)):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
+                return False
+            else:
+                #backtrack
+                Hamiltonian.removeLastVertex()#remove last vertex on Hamiltonian Walk
+                self.resetUnvisitedEdgesAt(vertex)#remove list of visted list
+                return self.tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices()-1), totalvisited-1, Hamiltonian) #makefunction call
+        else:#go throught unchecked edges
+            # Go to the next node that has NOT been visited
+            nextVertex = currentVertexUnexhaustedEdges[0]
+            Hamiltonian.addVertex(nextVertex)
+            self.unvisitedE[nextVertex][vertex] =0
+            return self.tryVisiting(nextVertex,totalvisited+1,Hamiltonian)
+        
+
+    def getUnvisitedEdgesAt(self, vertex):
+        returnList = []
+        for j in range(self.totalV):
+            if( self.unvisitedE[vertex][j] == 1):#1 means there is a connection
+                returnList.append(j)
+        return returnList
+
+    def resetUnvisitedEdgesAt(self, vertex):
+        for j in range(self.totalV):
+            self.unvisitedE[vertex][j] = self.edges[vertex][j]
