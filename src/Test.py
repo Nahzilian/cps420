@@ -61,7 +61,9 @@ def testInput(filename, expected):
   print("\n=======  Test " + filename +"  =======\n")
   found = 0
   graphList = Graph.fromFile(filename)
+  print("There is " + str(len(graphList)) )
   for graph in graphList:
+    print("Testing a graph " )
     found += testOnGraph(graph)
   print("\nHamiltonian circuits expected: " + str(expected) + ", found: " + str(found))
   return found
