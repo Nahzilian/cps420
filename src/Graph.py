@@ -240,24 +240,23 @@ class Graph:
         Returns a Hamiltonian circuit of type Walk for the graph if one exists,
         or None if none exists.
         """
-        Ham = Walk(self.totalVertices())
+        
+        if(self.totalV<3):#make sure that it has atleast 3 vertices
+            return None
+        
+        Ham = Walk(self.totalVertices())#make walk instance to "walk through the graph"
         Ham.addVertex(0)#add first vertex
-        self.unvisitedE[0][0] =0
 
-        returnedVal = [0,1,Ham]
-        while( type(returnedVal) is list ):
+        returnedVal = [0,1,Ham]#The values for the inital function call
+        while( type(returnedVal) is list ):#used to call tryVisiting in a "Tail recursive optimined fashion"
             returnedVal = self.tryVisiting( returnedVal[0],returnedVal[1],returnedVal[2] )
         hasHam = returnedVal
-        if(hasHam):
-            #print("has ham...")
-            #print (Ham)
+        if(hasHam):#if it has hamiltonian circuit
             appendHam = Walk(self.totalVertices()+1)
-            for i in range(self.totalVertices()):
+            for i in range(self.totalVertices()):#copy to new walk(in order to add one extra node to the end to make it a proper Hamiltonian circuit)
                 appendHam.addVertex( Ham.getVertex(i))
-            appendHam.addVertex(0)
-            #print (appendHam)
+            appendHam.addVertex(0)#add the last vertex that connects it in a loop
             return appendHam
-        #print("no ham")
         return None
     
 
@@ -276,34 +275,26 @@ class Graph:
 
         Returns True iff a Hamiltonian circuit has been found and False otherwise
         """
-
-        #if found the circuit
-        #if( Hamiltonian.totalVertices() == self.totalV and Hamiltonian.getVertex(Hamiltonian.totalVertices()-1)==0 ):
-        #    return True
-        currentVertexUnexhaustedEdges = self.getUnvisitedEdgesAt(vertex,Hamiltonian)
-        if( Hamiltonian.totalVertices() == self.totalV and (self.unvisitedE[vertex][0]==1) ):
+        currentVertexUnexhaustedEdges = self.getUnvisitedEdgesAt(vertex,Hamiltonian)#Get a list of vertices that still need to be checked
+        if(Hamiltonian.totalVertices() == self.totalV and (self.unvisitedE[vertex][0]==1) ):#check if Hamiltonian circuit exists
             return True
         
         if( currentVertexUnexhaustedEdges == []  ):#If all edges are exhausted then backtrack(delect checked line and remove from list)
             if(vertex == Hamiltonian.getVertex(0) and Hamiltonian.totalVertices()<2):#if all edges are exhausted on the starting Vertex then no-hamiltonian circuit
                 return False
             else:
-                #backtrack
                 temp =Hamiltonian.removeLastVertex()#remove last vertex on Hamiltonian Walk
                 self.resetUnvisitedEdgesAt(vertex)#remove list of visted list
-                return [Hamiltonian.getVertex(Hamiltonian.totalVertices()-1), totalvisited-1, Hamiltonian]
-                #return self.tryVisiting(Hamiltonian.getVertex(Hamiltonian.totalVertices()-1), totalvisited-1, Hamiltonian) #makefunction call
-        else:#go throught unchecked edges
-            # Go to the next node that has NOT been visited
+                return [Hamiltonian.getVertex(Hamiltonian.totalVertices()-1), totalvisited-1, Hamiltonian]#return list to make a "tail end recursive call"
+        else:#Go to the next node that has NOT been visited
             nextVertex = currentVertexUnexhaustedEdges[0]
             Hamiltonian.addVertex(nextVertex)
             self.unvisitedE[vertex][nextVertex] =0
             self.unvisitedE[nextVertex][vertex] =0
-            return [nextVertex,totalvisited+1,Hamiltonian]
-            #return self.tryVisiting(nextVertex,totalvisited+1,Hamiltonian)
+            return [nextVertex,totalvisited+1,Hamiltonian]#return list to make a "tail end recursive call"
         
-
-    def getUnvisitedEdgesAt(self, vertex, ham):
+    
+    def getUnvisitedEdgesAt(self, vertex, ham):#used to get all unvisted edges for a vertex
         returnList = []
         for j in range(self.totalV):
             if( self.unvisitedE[vertex][j] == 1 and ( vertex != j ) ):#1 means there is a connection
@@ -313,12 +304,8 @@ class Graph:
         for i in range(ham.totalVertices()):
             if ( ham.getVertex(i) in returnList ):
                 returnList.remove(ham.getVertex(i))
-
-        #print("Get unvist at - " +str(vertex) +" -")
-        #print( returnList)
-
         return returnList
 
-    def resetUnvisitedEdgesAt(self, vertex):
+    def resetUnvisitedEdgesAt(self, vertex):#Will reset what has been visited(used for when doing a backtrack, thus you need to forget the visited paths)
         for j in range(self.totalV):
             self.unvisitedE[vertex][j] = self.edges[vertex][j]
